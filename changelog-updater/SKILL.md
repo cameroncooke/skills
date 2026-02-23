@@ -74,9 +74,17 @@ For every commit or group of commits, ask:
 
 Changes that are almost always skipped:
 - Internal refactors, code restructuring, renaming internals
-- Test additions or CI pipeline changes
+- Test additions or routine CI pipeline changes
 - Dependency bumps with no user-visible effect
 - Documentation changes (unless they fix a significant user-facing gap)
+
+### Never skip these
+
+Some changes look internal but directly affect users. Always include:
+
+- **Security fixes** — even in CI, release pipelines, or build infrastructure. A vulnerability in the release workflow is a supply chain security issue that affects every user who installs the package. Frame the bullet around the risk that was closed.
+- **Agent-facing improvements** — tool descriptions, next-step suggestions, and guided workflows are the product's UX for AI agents. If tool guidance was wrong, missing, or caused agents to take redundant/incorrect actions, that is a user-visible fix or improvement. Frame the bullet around the agent behaviour change the user would notice (e.g., "agents no longer double-build when running an app").
+- **Documentation shipped with the product** — if the project distributes skill files, config schemas, or other docs that agents or tools read at runtime, fixes to those are user-facing fixes, not just "docs changes."
 
 **Do NOT map commits 1:1 to bullets.** Many commits produce zero bullets. Several related commits often produce one bullet. Cluster by outcome, not by commit.
 
@@ -168,6 +176,46 @@ A single bullet like "Added project-level configuration via config file" tells u
 
 The goal: a user reading the changelog should be able to understand the feature and start using it, or at minimum know exactly where to look next.
 
+## Contributor attribution
+
+Acknowledge external contributors who materially wrote the code for a change.
+
+### How to identify contributors
+
+For each commit in the delta range, check the commit author (`git log --format='%an'`) and the PR author (`gh pr view <number> --json author`). A contributor is **external** if they are not the repository owner or a core maintainer.
+
+When a PR has commits from multiple authors, check who wrote the substantive code vs. who opened/merged the PR. Attribute based on who authored the implementation, not who merged it.
+
+### Attribution format
+
+Append attribution to the end of the relevant bullet, using the project's existing link style:
+
+```
+- Fixed the thing ([#123](https://github.com/org/repo/pull/123) by [@username](https://github.com/username)).
+```
+
+### Rules
+
+- **Never attribute the repository owner or core maintainers.** Their work is the baseline — the changelog is written from their perspective.
+- **Only attribute for code contributions.** If someone reported an issue but the owner implemented the fix, reference the issue but do not use `by @reporter`. Use `([#123](link))` without `by`.
+- **Do attribute when an external contributor authored the implementation**, even if the owner opened the PR, added follow-up commits, or merged it.
+- If multiple external contributors co-authored a change, list them: `by [@a](link) and [@b](link)`.
+- Bot accounts (dependabot, renovate, fix-it-felix, etc.) are never attributed.
+
+### Discovering the repository owner
+
+Check `git log --reverse --format='%an' | head -1` or the repository's GitHub owner. When in doubt, check who has the most commits — they are likely the owner. Do not attribute them.
+
+## Catch-all for filtered work
+
+When the commit range contains a meaningful volume of skipped internal work (refactors, test improvements, CI hardening, dependency updates, internal reliability work), add a single closing line after the last categorised section and before `### Removed` (if present) or at the end:
+
+```
+Various other internal improvements to stability, performance, and code quality.
+```
+
+This acknowledges the effort without cluttering the notes. Only add this line when there are genuinely many filtered commits (roughly 10+). Do not add it for small releases where every commit maps to a bullet.
+
 ## Final checks
 
 Before outputting, verify:
@@ -179,6 +227,9 @@ Before outputting, verify:
 5. No banned terms appear outside the Breaking section.
 6. A user who has only read the README would understand every bullet.
 7. Empty sections removed (unless project convention keeps them).
+8. Security fixes, agent-facing improvements, and product-shipped docs fixes were not skipped.
+9. External contributors are attributed; the repo owner is never attributed.
+10. Catch-all line is present when 10+ commits were filtered out, absent otherwise.
 
 ## Output
 
