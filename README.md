@@ -6,6 +6,7 @@ A collection of custom Agent skills.
 
 - `agent-browser` - Browser automation using `agent-browser` CLI.
 - `changelog-updater` - Update upcoming `CHANGELOG` release notes with user-facing outcomes, including canonical prerelease handling (for example, `v2.0.0-beta.1` -> `2.0.0` section).
+- `pr-learning` - Mine PR review feedback into ranked rule/learning candidates and codify approved items into AGENTS.md/CLAUDE.md with dedupe + provenance.
 
 ## Usage
 

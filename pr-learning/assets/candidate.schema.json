@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PR Learning Candidate",
+  "type": "object",
+  "required": [
+    "id",
+    "type",
+    "scope_suggestion",
+    "topic",
+    "severity",
+    "proposed_text",
+    "confidence",
+    "support",
+    "dedupe",
+    "source_refs"
+  ],
+  "properties": {
+    "id": {"type": "string"},
+    "type": {"type": "string", "enum": ["rule", "learning"]},
+    "scope_suggestion": {"type": "string", "enum": ["project", "user"]},
+    "topic": {"type": "string"},
+    "severity": {"type": "string", "enum": ["high", "medium", "low"]},
+    "proposed_text": {"type": "string"},
+    "rationale": {"type": "string"},
+    "confidence": {
+      "type": "object",
+      "required": ["acceptance_average", "band", "score_total", "components"],
+      "properties": {
+        "acceptance_average": {"type": "number"},
+        "band": {"type": "string", "enum": ["high", "medium", "low"]},
+        "score_total": {"type": "number"},
+        "components": {
+          "type": "object",
+          "required": ["support", "acceptance", "severity", "generality"],
+          "properties": {
+            "support": {"type": "number"},
+            "acceptance": {"type": "number"},
+            "severity": {"type": "number"},
+            "generality": {"type": "number"}
+          }
+        }
+      }
+    },
+    "support": {
+      "type": "object",
+      "required": ["observation_count", "distinct_prs", "review_signal_count", "disputed_present"],
+      "properties": {
+        "observation_count": {"type": "number"},
+        "distinct_prs": {"type": "array", "items": {"type": "number"}},
+        "review_signal_count": {"type": "number"},
+        "disputed_present": {"type": "boolean"}
+      }
+    },
+    "dedupe": {
+      "type": "object",
+      "required": ["semantic_key", "fuzzy_key"],
+      "properties": {
+        "semantic_key": {"type": "string"},
+        "fuzzy_key": {"type": "string"}
+      }
+    },
+    "source_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["pr_number", "urls"],
+        "properties": {
+          "pr_number": {"type": "number"},
+          "urls": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    }
+  }
+}

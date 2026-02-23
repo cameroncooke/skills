@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PR Learning Store v1",
+  "type": "object",
+  "required": ["version", "codified"],
+  "properties": {
+    "version": {"type": "number", "const": 1},
+    "repo": {"type": ["string", "null"]},
+    "seen_observation_keys": {
+      "type": "array",
+      "items": {"type": "string"}
+    },
+    "codified": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["candidate_id", "dedupe", "inserted_at", "sources", "text_fingerprint", "scope", "file_path"],
+        "properties": {
+          "candidate_id": {"type": "string"},
+          "dedupe": {
+            "type": "object",
+            "required": ["semantic_key", "fuzzy_key"],
+            "properties": {
+              "semantic_key": {"type": "string"},
+              "fuzzy_key": {"type": "string"}
+            }
+          },
+          "inserted_at": {"type": "string"},
+          "sources": {"type": "array"},
+          "text_fingerprint": {"type": "string"},
+          "scope": {"type": "string", "enum": ["project", "user"]},
+          "file_path": {"type": "string"}
+        }
+      }
+    }
+  }
+}
