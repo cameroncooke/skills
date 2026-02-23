@@ -148,6 +148,52 @@ Use `Added`, `Changed`, `Fixed`, and `Breaking` headings (match existing project
 | Bug fix or regression fix | `Fixed` |
 | Behaviour change that requires user action or breaks existing usage | `Breaking` |
 
+## Documentation links
+
+When a changelog bullet describes a change to the tools, CLI, API surface, or configuration, link to the relevant documentation so users know where to learn more.
+
+### Discovering doc references from commits
+
+During commit analysis, check whether the commits that introduced a feature or change also touched files in `docs/`, `skills/`, or other user-facing documentation directories:
+
+```bash
+# For each feature-related commit or PR range, find co-changed docs
+git diff --name-only <commit>^ <commit> -- 'docs/' 'skills/' '*.md'
+```
+
+If a feature commit and a doc change share the same commit, PR, or are adjacent in the log, the doc is the canonical reference for that feature. Check the headings in those files to find the most specific anchor.
+
+### What to link
+
+Add a doc link when a bullet describes:
+- A new tool, command, or CLI subcommand
+- A new or changed configuration option, parameter, or workflow
+- A new integration or setup path
+
+Do **not** add doc links to:
+- Bug fixes (unless the fix changes how users interact with a feature)
+- Behavioural guidance changes (e.g. "agents now prefer X tool")
+- Internal or security-only improvements
+
+### Link format
+
+Append the link at the end of the bullet, after any PR reference and contributor attribution:
+
+```
+- Added session defaults profiles for switching between configurations. See [docs/SESSION_DEFAULTS.md](docs/SESSION_DEFAULTS.md#namespaced-profiles).
+- Added `init` command ([#236](link) by [@user](link)). See [docs/SKILLS.md](docs/SKILLS.md#install).
+```
+
+Use an anchor (`#heading-slug`) when the doc has a specific section for the feature. Use just the file path when linking to the doc as a whole. Match the project's existing link convention (relative paths or full GitHub URLs — whichever is already used in the changelog).
+
+### Excluded directories
+
+Never link to `docs/dev/` or similar internal developer documentation directories. These are contributor-facing, not consumer-facing. Only link to docs that a user or agent would read.
+
+### When no doc exists
+
+If a feature-level change has no corresponding documentation, do not fabricate a link. Write the bullet without one. Optionally flag it in the output summary as a bullet that could benefit from a doc link.
+
 ## Breaking changes
 
 Breaking changes are where detail matters most. Users need enough information to act.
@@ -230,6 +276,7 @@ Before outputting, verify:
 8. Security fixes, agent-facing improvements, and product-shipped docs fixes were not skipped.
 9. External contributors are attributed; the repo owner is never attributed.
 10. Catch-all line is present when 10+ commits were filtered out, absent otherwise.
+11. Bullets for new or changed tools/CLI/config link to relevant docs discovered from co-changed files.
 
 ## Output
 
