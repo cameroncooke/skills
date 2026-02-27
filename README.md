@@ -51,6 +51,6 @@ Copy individual skill directories into your agent's skills folder:
 | Agent | Skills path |
 |---|---|
 | **Claude Code** | `~/.claude/skills/` |
-| **Codex** | `~/.codex/skills/public/` |
+| **Others** | `~/.agents/skills/` |
 
 Each skill is self-contained — copy only the ones you need.
