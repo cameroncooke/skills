@@ -243,9 +243,9 @@ Append attribution to the end of the relevant bullet, using the project's existi
 ### Rules
 
 - **Never attribute the repository owner or core maintainers.** Their work is the baseline — the changelog is written from their perspective.
-- **Only attribute for code contributions.** If someone reported an issue but the owner implemented the fix, reference the issue but do not use `by @reporter`. Use `([#123](link))` without `by`.
+- **Only attribute for code contributions.** If someone reported an issue but the owner implemented the fix, reference the issue but do not use `by @reporter`. Use `([#123](https://github.com/org/repo/pull/123))` without `by`.
 - **Do attribute when an external contributor authored the implementation**, even if the owner opened the PR, added follow-up commits, or merged it.
-- If multiple external contributors co-authored a change, list them: `by [@a](link) and [@b](link)`.
+- If multiple external contributors co-authored a change, list them: `by [@a](https://github.com/a) and [@b](https://github.com/b)`.
 - Bot accounts (dependabot, renovate, fix-it-felix, etc.) are never attributed.
 
 ### Discovering the repository owner

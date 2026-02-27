@@ -46,7 +46,7 @@ Parse the release markdown sections (Added, Changed, Fixed, Removed) and rewrite
 
 ### Step 3 — Identify external contributors
 
-Scan release notes for attribution patterns like `by [@username](...)`.
+Scan release notes for attribution patterns like `by [@username](https://github.com/username)`.
 
 Extract GitHub usernames, then determine the repo owner:
 

@@ -1,6 +1,6 @@
 ---
 name: pr-learning
-description: Mine PR review feedback to extract repeatable rules/learnings, present ranked candidates, and codify approved items into AGENTS.md/CLAUDE.md with dedupe + provenance.
+description: Use when mining PR review feedback to extract repeatable rules/learnings, present ranked candidates, and codify approved items into AGENTS.md/CLAUDE.md with dedupe + provenance.
 ---
 
 # PR Learning (Continuous Improvement from Review Feedback)

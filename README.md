@@ -46,7 +46,16 @@ Weaves changed and unchanged code into a single story — from the trigger that 
 
 ## Installation
 
-Copy individual skill directories into your agent's skills folder:
+Install individual skills directly from this repo with `npx skills add`:
+
+```bash
+npx skills add cameroncooke/cameroncooke-skills@agent-change-walkthrough
+npx skills add cameroncooke/cameroncooke-skills@changelog-updater
+npx skills add cameroncooke/cameroncooke-skills@pr-learning
+npx skills add cameroncooke/cameroncooke-skills@release-tweet
+```
+
+You can also install manually by copying skill directories into your agent's skills folder:
 
 | Agent | Skills path |
 |---|---|

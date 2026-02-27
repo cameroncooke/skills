@@ -28,7 +28,7 @@ Collect both sources before writing:
 
 2. Git-based evidence (source of truth for output)
    - Changed file list
-   - Full diff per changed file
+   - Diff per changed file (analyze full diffs locally, but only quote the minimum needed hunks in output)
    - Relevant unchanged context needed to explain behavior
 
 Use commands such as:
@@ -47,6 +47,7 @@ git log --oneline -- <file>
 ```
 
 Never include conversation process, investigation history, or request negotiation as walkthrough steps. The walkthrough must describe implementation behavior only.
+Never include full file dumps, raw secrets, credentials, tokens, private keys, or copied production payloads in the final output.
 
 ## Step 3: Build the story stack
 
@@ -67,7 +68,7 @@ For each story step:
 - Place `Filename: `<relative/path/to/file.ext:start_line>`` immediately above each snippet
 - Optionally place `Symbol: `<function/method/class>`` above each snippet when useful
 - Show a short code snippet
-- For data-shape/model/API changes, include concrete example data (input/output or before/after payload) that uses realistic values
+- For data-shape/model/API changes, include concrete example data (input/output or before/after payload) using sanitized, representative values
 - Explain the step in natural prose as a developer-to-developer walkthrough
 - Explain what this step causes next in the flow
 - Avoid forward references: do not use a field/type/function in a step before showing where it is defined or introduced
@@ -81,7 +82,8 @@ When code changed, prefer mini-diff snippets:
 + new behavior
 ```
 
-When the change affects data shape or behavior, add a small `Example input/output` block after the code snippet to show realistic values flowing through the updated code.
+When the change affects data shape or behavior, add a small `Example input/output` block after the code snippet to show representative (synthetic) values flowing through the updated code.
+Do not copy verbatim payloads from logs, production data, or repository fixtures that may contain sensitive information.
 
 Call out semantic effect per changed hunk.
 ## Step 5: Integrate analysis inline
@@ -191,11 +193,12 @@ Complete only when all checks pass:
 - No forward references: definitions/contracts appear before usages that depend on them.
 - Unchanged-but-critical context appears in `UNCHANGED CONTEXT` steps.
 - Each changed hunk includes reason + behavioral effect.
-- Data-shape/model/API changes include concrete example input/output with realistic values.
+- Data-shape/model/API changes include concrete example input/output with sanitized representative values.
 - Trade-offs, alternatives, performance notes, and risk notes appear at relevant steps.
 - Facts are distinguished from inference.
 - Unknowns are explicitly labeled.
 - Conversation process/history does not appear as a walkthrough step.
 - No claim of validation is made unless validation was actually performed.
+- Snippets and examples contain no credentials, keys, tokens, or other sensitive values.
 
 If any criterion fails, state what is missing and continue refining before finalizing.
