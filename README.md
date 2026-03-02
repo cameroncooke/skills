@@ -44,6 +44,16 @@ Weaves changed and unchanged code into a single story — from the trigger that 
 
 ---
 
+### reconcile-merge-conflicts
+
+Resolves merge and rebase conflicts with branch-aware reconciliation and regression-focused decision making.
+
+Detects whether a merge or rebase is active, asks for the target when none is in progress, then resolves conflicts file-by-file by preserving important intent from both sides while treating the target branch (usually `main`) as canonical for current behavior. Produces a confidence-ranked reconciliation audit with risks, evidence, and open questions.
+
+**Invoke with:** `/reconcile-merge-conflicts`
+
+---
+
 ## Installation
 
 Install individual skills directly from this repo with `npx skills add`:
@@ -53,6 +63,7 @@ npx skills add cameroncooke/cameroncooke-skills@agent-change-walkthrough
 npx skills add cameroncooke/cameroncooke-skills@changelog-updater
 npx skills add cameroncooke/cameroncooke-skills@pr-learning
 npx skills add cameroncooke/cameroncooke-skills@release-tweet
+npx skills add cameroncooke/cameroncooke-skills@reconcile-merge-conflicts
 ```
 
 You can also install manually by copying skill directories into your agent's skills folder:
