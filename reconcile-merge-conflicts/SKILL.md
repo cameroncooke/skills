@@ -129,7 +129,7 @@ git show :3:<path>
 
 Use temporal signals as evidence, not proof.
 
-Read `references/decision-rubric.md` for ambiguous choices.
+Read `<skill-dir>/references/decision-rubric.md` for ambiguous choices.
 
 ## Step 4: Reconcile conflicts file-by-file
 
@@ -170,7 +170,7 @@ Before each commit-producing continuation step (especially `git rebase --continu
 
 After all conflicts are resolved, run the full quality gate set.
 
-Read `references/quality-gates.md` for command discovery and precedence.
+Read `<skill-dir>/references/quality-gates.md` for command discovery and precedence.
 
 Never claim checks passed unless actually run.
 
