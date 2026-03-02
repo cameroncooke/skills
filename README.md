@@ -54,6 +54,16 @@ Detects whether a merge or rebase is active, asks for the target when none is in
 
 ---
 
+### pr-comment-resolution
+
+Audits and resolves PR review comments with an evidence-first workflow.
+
+Collects PR feedback through the skill’s helper scripts, then classifies each item as valid/invalid/contentious/already-addressed/out-of-scope using direct code evidence. Default collection is focused on unresolved review threads and standalone comments, with optional views for counts/bodies/thread locations to reduce token usage. After approval, it can help apply scoped fixes, post replies, and resolve threads with commit-linked rationale.
+
+**Invoke with:** `/pr-comment-resolution`
+
+---
+
 ## Installation
 
 Install individual skills directly from this repo with `npx skills add`:
@@ -64,6 +74,7 @@ npx skills add cameroncooke/cameroncooke-skills@changelog-updater
 npx skills add cameroncooke/cameroncooke-skills@pr-learning
 npx skills add cameroncooke/cameroncooke-skills@release-tweet
 npx skills add cameroncooke/cameroncooke-skills@reconcile-merge-conflicts
+npx skills add cameroncooke/cameroncooke-skills@pr-comment-resolution
 ```
 
 You can also install manually by copying skill directories into your agent's skills folder:
