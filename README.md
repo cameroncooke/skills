@@ -1,5 +1,7 @@
 # Agent Skills
 
+<img src="banner.png" alt="AXe" width="600"/>
+
 A curated collection of custom skills for AI coding agents — designed to automate repetitive developer workflows around releases, changelogs, code review, and knowledge sharing.
 
 ## Skills
