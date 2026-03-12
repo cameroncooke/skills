@@ -491,11 +491,8 @@ def transform_payload(data: dict[str, Any], args: argparse.Namespace) -> dict[st
         for review in reviews_raw:
             if args.exclude_bot_comments and is_bot_author(review.get("user")):
                 continue
-            # Keep only reviews with textual content that an agent can audit.
-            state = str(review.get("state") or "")
+            # Keep any submitted review with textual content that an agent can audit.
             body = str(review.get("body") or "").strip()
-            if state not in {"COMMENTED", "CHANGES_REQUESTED"}:
-                continue
             if not body:
                 continue
             reviews.append(normalize_review(review))

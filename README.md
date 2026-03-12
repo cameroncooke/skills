@@ -60,7 +60,7 @@ Detects whether a merge or rebase is active, asks for the target when none is in
 
 Audits and resolves PR review comments with an evidence-first workflow.
 
-Collects PR feedback through the skill’s helper scripts, then classifies each item as valid/invalid/contentious/already-addressed/out-of-scope using direct code evidence. Default collection is focused on unresolved review threads and standalone comments, with optional views for counts/bodies/thread locations to reduce token usage. After approval, it can help apply scoped fixes, post replies, and resolve threads with commit-linked rationale.
+Collects PR feedback through the skill’s helper scripts, then classifies each item as valid/invalid/contentious/already-addressed/out-of-scope using direct code evidence. Audits inline review threads, general PR comments, and optional review summaries with the same evidence-first process, including broader question-style feedback that requires targeted code reading. After approval, it can help apply scoped fixes, post follow-up comments or replies as appropriate, and resolve threads with commit-linked rationale.
 
 **Invoke with:** `/pr-comment-resolution`
 
