@@ -23,9 +23,12 @@ python3 <skill-dir>/scripts/collect_pr_feedback.py --pr 1234
 
 If PR is not provided, the script will try branch-based detection. If detection is ambiguous or empty, ask the user for PR number/URL and rerun.
 
-Read `<skill-dir>/references/classification-rubric.md` before auditing.
+You must read `<skill-dir>/references/classification-rubric.md` before auditing.
+If you have not read it, stop and read it before continuing. Do not audit PR feedback without it.
 
 ## Step 2: Audit each comment
+
+Fail the workflow if you have not read `<skill-dir>/references/classification-rubric.md` first.
 
 Use `issue_comments` and `review_threads` from the JSON output as primary inputs. `reviews` is empty by default unless `--include-review-summaries` is used.
 
@@ -39,7 +42,7 @@ Skipped items do not get a full audit — they appear only in the "Skipped" sect
 
 For each remaining comment/thread, perform a full audit:
 1. Restate the concern briefly.
-2. Verify in code/diff/tests directly.
+2. Verify the exact reported issue in code/diff/tests directly.
 3. Classify as one of:
    - `valid`
    - `invalid`
@@ -47,7 +50,19 @@ For each remaining comment/thread, perform a full audit:
    - `already-addressed`
    - `out-of-scope`
 4. Gather evidence — concrete file/line references and short code snippets.
-5. Decide the best resolution (or two options only if truly contentious).
+5. For anything likely to be `valid`, identify the exact defect pattern, then perform a second bounded pass over the smallest related changed PR surface to check for the same problem.
+6. Decide the best resolution (or two options only if truly contentious).
+
+For a likely `valid` item, use two passes:
+- First pass: confirm the exact reported issue.
+- Second pass: check the same bug pattern in the related changed PR surface before finalising the proposed resolution.
+
+Scope the second pass narrowly:
+- Start with the reported location and nearby changed code in the same file.
+- Include other changed files only when they participate in the same code path or duplicate the same introduced logic.
+- Stay on the same defect class.
+
+Do not expand into unrelated cleanup, untouched historical code, different issue classes, or opportunistic refactors.
 
 Do not return shallow summaries. Make the rationale specific enough that a reviewer can verify the decision quickly.
 
@@ -72,11 +87,15 @@ Do not edit code before explicit user approval. Present findings using this form
 
 ## Analysis
 
-<Discussion-style paragraph(s) explaining what you found when you checked the code. Reference specific files and lines naturally in prose, e.g. "In `src/foo.ts:42`, the value is already validated before this point..." Include short inline code snippets where they help. State whether the concern is warranted and why.>
+<Discussion-style paragraph(s) explaining what you found when you checked the code. Reference specific files and lines naturally in prose, e.g. "In `src/foo.ts:42`, the value is already validated before this point..." Include short inline code snippets where they help. State whether the concern is warranted and why. For `valid` items, explain both passes: how you confirmed the exact reported issue, then how you checked the bounded related changed PR surface for the same defect pattern.>
+
+## Expanded issues found
+
+<Only for `valid` items. List any additional same-pattern instances found during the second bounded pass, with short file/line references and one-line explanations. If none were found, say so plainly.>
 
 ## Proposed resolution
 
-<What to do and why. For `no change`, explain why no action is needed. For code/doc changes, describe the specific change clearly. Keep it brief — one or two sentences is fine.>
+<What to do and why. For `no change`, explain why no action is needed. For code/doc changes, describe the specific change clearly. Keep it brief — one or two sentences is fine. For `valid` items, the fix on offer should cover both the originally reported issue and any additional same-pattern instances listed above.>
 
 ---
 
@@ -108,8 +127,8 @@ Do not edit code before explicit user approval. Present findings using this form
 ## Next steps
 
 <N> item(s) need changes. If you approve, I will:
-  1. <change 1>
-  2. <change 2>
+  1. <change 1, covering the reported issue plus any same-pattern instances listed in Expanded issues found>
+  2. <change 2, covering the reported issue plus any same-pattern instances listed in Expanded issues found>
   3. Run quality checks, then come back for commit/push approval before posting GitHub replies
 ````
 
@@ -118,12 +137,36 @@ Formatting rules:
 - Classification and comment type go on one line directly under the heading using inline code + separator.
 - Reviewer words always in blockquotes — clearly separated from agent analysis.
 - Analysis reads like prose, not bullet lists. Weave file references into sentences naturally.
+- For `valid` items, explicitly show the two-pass audit: the exact reported issue first, then the bounded same-pattern pass.
+- For `valid` items, include an `Expanded issues found` section, even when the answer is that no additional instances were found.
+- For non-`valid` items, omit the `Expanded issues found` section entirely.
 - Horizontal rules (`---`) separate items.
 - When bot comments contain large HTML/autofix blocks, keep only the feedback-relevant text.
 
 ## Step 4: Implement approved fixes
 
 Keep changes minimal and in scope.
+
+For each approved `valid` item:
+1. Fix the exact reported issue you already confirmed in the first audit pass.
+2. Fix every additional same-pattern instance you already found in the second bounded pass.
+3. Keep the implementation aligned with the approved `Expanded issues found` section.
+4. Leave unrelated findings alone, even if you notice them while checking nearby code.
+
+In scope:
+- the same defect class
+- the same changed file/hunk
+- nearby changed code within the related changed PR surface
+- sibling instances caused by duplicated new logic in the current PR
+- directly related changed call sites or helpers that participate in the same bug mechanism
+
+Out of scope:
+- repository-wide hunts
+- untouched historical code outside the related changed area
+- unrelated cleanup
+- different issue classes that merely look similar
+- opportunistic refactors
+
 Run relevant quality checks before proposing commit/push (for example: lint, format, type-check, build, tests for touched areas).
 If no code changed, state that checks were not required.
 Ask before commit/push.
